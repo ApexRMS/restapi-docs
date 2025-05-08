@@ -1,0 +1,747 @@
+openapi: 3.1.0
+info:
+  title: SyncroSim API
+  description: API for managing organizations, libraries, maps, and performing zonal calculations.
+  version: 1.0.0
+  contact:
+    name: SyncroSim API Support
+    email: support@syncrosim.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.syncrosim.com/v1
+    description: Production server
+security:
+  - x-ss-api-key: []
+paths:
+  /orgs/members:
+    get:
+      summary: Get members of an organization
+      operationId: getOrganizationMembers
+      tags:
+        - Organizations
+      responses:
+        "200":
+          description: List of members in the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Username of the member
+                  email:
+                    type: string
+                    description: Registered email of the member
+                  firstName:
+                    type: string
+                    description: First name of the member
+                  lastName:
+                    type: string
+                    description: Last name of the member
+                  organization:
+                    type: string
+                    description: Organization the member belongs to
+                  dateJoined:
+                    type: string
+                    description: Date the member joined
+              examples:
+                Types:
+                  summary: Types
+                  value: 
+                    username: string
+                    email: string
+                    firstName: string
+                    lastName: string
+                    organization: string
+                    dateJoined: string
+                Example:
+                  summary: Example
+                  value: 
+                    username: example.user
+                    email: exampleuser@gmail.com
+                    firstName: Example
+                    lastName: User
+                    organization: Example Organization
+                    dateJoined: 2024-09-15 at 4:35 PM
+
+    put:
+      summary: Invite a member to join an organization
+      operationId: addOrganizationMember
+      tags:
+        - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username to add to the organization
+      responses:
+        "201":
+          description: Request for member to join successfully sent
+
+    delete:
+      summary: Remove a member from an organization
+      operationId: removeOrganizationMember
+      tags:
+        - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username to remove from the organization
+      responses:
+        "204":
+          description: Member removed successfully
+
+  /libs:
+    get:
+      summary: Get libraries of an organization
+      operationId: getLibraries
+      tags:
+        - Libraries
+      responses:
+        "200":
+          description: List of libraries in the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  libraryName:
+                    type: string
+                    description: Name of the library
+                  uploadUser:
+                    type: string
+                    description: Name of user that uploaded the library
+                  lastModified:
+                    type: string
+                    description: Date the library was last modified
+              examples:
+                Types:
+                  summary: Types
+                  value: 
+                    libraryName: string
+                    lastModified: string
+                Example:
+                  summary: Example
+                  description: Example organization with three members
+                  value: 
+                    libraryName: helloworldCourse
+                    lastModified: 2023-09-11 at 2:56 PM
+
+  /libs/user/{username}/{libraryName}/metadata:
+    get:
+      summary: Get library metadata
+      operationId: getLibraryMetadata
+      tags:
+        - Libraries
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library
+      responses:
+        "200":
+          description: Metadata of the library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  libraryName:
+                    type: string
+                    description: Name of library
+                  libraryOwner:
+                    type: string
+                    description: Owner of the library
+                  lastModified:
+                    type: string
+                    description: Date the library was last modified
+                  fileSize:
+                    type: string
+                    description: Size of the file
+                  packageName:
+                    type: string
+                    description: Name of SyncroSim package used in the library
+                  packageVersion:
+                    type: string
+                    description: Version of SyncroSim package used in the library
+                  description:
+                      type: string
+                      description: Description of the library
+              examples:
+                Types:
+                  summary: Types
+                  value: 
+                    libraryName: string
+                    libraryOwner: string
+                    lastModified: string
+                    fileSize: string
+                    packageName: string
+                    packageVersion: string
+                    description: string
+                Example:
+                  summary: Example
+                  value: 
+                    libraryName: helloworldCourse
+                    libraryOwner: ApexRMS
+                    lastModified: 2023-09-11 at 2:56 PM
+                    fileSize: 240 KB
+                    packageName: helloworldCourse_Primary
+                    packageVersion: 1.0.2
+                    description: "This Library was designed to showcase the publishing process to the SyncroSim Cloud."
+
+  /libs/user/{username}/{libraryName}/scenarios:
+    get:
+      summary: Get scenarios in a library
+      operationId: getLibraryScenarios
+      tags:
+        - Libraries
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library
+      responses:
+        "200":
+          description: List of scenarios in the library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scenarioId:
+                    type: integer
+                    description: Scenario ID number
+                  parentId:
+                    type: integer
+                    description: ID number of the parent scenario
+                  scenarioName:
+                    type: string
+                    description: Name of the scenario
+                  isResult:
+                    type: boolean
+                    description: True if result, false if not a result (i.e., a parent scenario)
+                  lastModified:
+                    type: string
+                    description: Date the scenario was last modified
+                  description:
+                    type: string
+                    description: Description of the scenario
+              examples:
+                Types:
+                  summary: Types
+                  value: 
+                    scenarioId: integer
+                    parentId: integer
+                    scenarioName: string
+                    isResult: boolean
+                    lastModified: string
+                    description: string
+                Example:
+                  summary: Example
+                  value: 
+                    scenarioId: 21
+                    parentId: 14
+                    scenarioName: Harvest 20 Hectares per Year - non spatial ([14] @ 20-Mar-2024 4:27 PM)
+                    isResult: true
+                    lastModified: 2024-03-20 at 4:39 PM
+                    description: Simple non-spatial model of a forest landscape with 20 hectares of timber harvest per year.
+
+  /libs/user/{username}/{libraryName}/maps:
+    get:
+      summary: Get maps in a library
+      operationId: getLibraryMaps
+      tags:
+        - Maps
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: An optional query parameter that can be 'tree' or 'flat' and that specifies how the response data will be structured. If not provided, structure defaults to 'flat'.
+      responses:
+        "200":
+          description: List of maps in the library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mapLayoutId:
+                    type: integer
+                    description: ID number of the map type, defined by MapLayoutTitle
+                  mapLayoutTitle:
+                    type: string
+                    description: Name of the map type, associated with MapLayoutId
+                  scenarioId:
+                    type: integer
+                    description: Scenario ID number 
+                  iteration:
+                    type: integer
+                    description: Iteration the map is generated from
+                  timestep:
+                    type: integer
+                    description: Timestep the map is generated from
+                  variableShortName:
+                    type: string
+                    description: Variable used to generate the map
+                  variableDisplayName:
+                    type: string
+                    description: Display name of the variable used to generate the map
+                  uniqueMapIdentifier:
+                    type: string
+                    description: The unique identifier for this map
+              examples:
+                Types:
+                  summary: Types
+                  value:
+                    mapLayoutId: integer
+                    mapLayoutTitle: string
+                    scenarioId: integer
+                    iteration: integer
+                    timestep: integer
+                    variableShortName: string
+                    variableDisplayName: string
+                    uniqueMapIdentifier: string
+                Example (flat):
+                  summary: Example (flat)
+                  value:
+                    mapLayoutId: 4
+                    mapLayoutTitle: States and ages
+                    scenarioId: 22
+                    iteration: 1
+                    timestep: 20
+                    variableShortName: stsim_StateClass
+                    variableDisplayName: State Classes
+                    uniqueMapIdentifier: NC0tLTIyLS0tMi0tLXN0c2ltX1N0YXRlQ2xhc3MtLS0yMA==
+                Example (tree):
+                  summary: Example (tree)
+                  value:
+                    maps:
+                      4:
+                        mapLayoutTitle: "States and ages"
+                        scenarios:
+                          22:
+                            iterations:
+                              1:
+                                variables:
+                                  "stsim_StateClass":
+                                    displayName: "State Classes"
+                                    timesteps:
+                                      20:
+                                        mapLayoutId: 4
+                                        mapLayoutTitle: States and ages
+                                        scenarioId: 22
+                                        iteration: 1
+                                        timestep: 20
+                                        variableShortName: stsim_StateClass
+                                        variableDisplayName: State Classes
+                                        uniqueMapIdentifier: NC0tLTIyLS0tMi0tLXN0c2ltX1N0YXRlQ2xhc3MtLS0yMA==
+                                      21:
+                                        mapLayoutId: 4
+                                        mapLayoutTitle: States and ages
+                                        scenarioId: 22
+                                        iteration: 1
+                                        timestep: 21
+                                        variableShortName: stsim_StateClass
+                                        variableDisplayName: State Classes
+                                        uniqueMapIdentifier: NC0tLTIyLS0tMi0tLXN0c2ltX1N0YXRlQ2xhc3MtLS0yMQ==
+                                      22:
+                                        mapLayoutId: 4
+                                        mapLayoutTitle: States and ages
+                                        scenarioId: 22
+                                        iteration: 1
+                                        timestep: 22
+                                        variableShortName: stsim_StateClass
+                                        variableDisplayName: State Classes
+                                        uniqueMapIdentifier: NC0tLTIyLS0tMi0tLXN0c2ltX1N0YXRlQ2xhc3MtLS0yMg==
+
+  /libs/user/{username}/{libraryName}/maps/{mapId}:
+    get:
+      summary: Get GeoTIFF file for a map
+      operationId: getRasterFile
+      tags:
+        - Maps
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of library
+        - name: mapId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: File name of the map to download (select from uniqueMapIdentifier variable in /libs/user/{username}/{libraryName}/maps/filterOptionTree response)
+      responses:
+        "200":
+          description: Path to GeoTIFF file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rasterFilePath:
+                    type: string
+                    description: Path to download specified map file. This url will be valid for 1 hour. 
+  
+  /libs/user/{username}/{libraryName}/maps/zonal:
+    post:
+      summary: Perform zonal calculations with single summarized result
+      operationId: performZonalCalculation
+      tags:
+        - Maps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mapId:
+                  type: string
+                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{username}/{libraryName}/maps response)
+                webhookUrl:
+                  type: string
+                  description: Webhook for sending the zonal calculation results
+                geojson:
+                  type: string
+                  description: Geojson of area to be used in the zonal calculation
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of library
+      responses:
+        "200":
+          description: Metadata about the attempted calculation request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the zonal calculation was started successfully
+                  message:
+                    type: string
+                    description: Optional informational message about this calculation request
+                  requestId:
+                    type: string
+                    description: The UUID for this request
+              examples:
+                Types:
+                  summary: Types
+                  value:
+                    success: boolean
+                    message: string
+                    requestId: string
+                Example:
+                  summary: Example
+                  value:
+                    success: True
+                    message: Zonal calculation started.
+                    requestId: 2871d70d-bcae-449b-9a07-a5ac29739fb1
+  /libs/user/{username}/{libraryName}/maps/zonal-histogram:
+    post:
+      summary: Perform zonal calculations with results summarized as a histogram
+      operationId: performZonalCalculationHistogram
+      tags:
+        - Maps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mapId:
+                  type: string
+                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{username}/{libraryName}/maps response)
+                webhookUrl:
+                  type: string
+                  description: Webhook for sending the zonal calculation results
+                geojson:
+                  type: string
+                  description: Geojson of area to be used in the zonal calculation
+                histogramBins:
+                  type: string
+                  description: List of values for break points in the histogram bins (optional; for continuous variables only)
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of library
+      responses:
+        "200":
+          description: Metadata about the attempted calculation request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the zonal calculation was started successfully
+                  message:
+                    type: string
+                    description: Optional informational message about this calculation request
+                  requestId:
+                    type: string
+                    description: The UUID for this request
+              examples:
+                Types:
+                  summary: Types
+                  value:
+                    success: boolean
+                    message: string
+                    requestId: string
+                Example:
+                  summary: Example
+                  value:
+                    success: True
+                    message: Zonal calculation started.
+                    requestId: 2871d70d-bcae-449b-9a07-a5ac29739fb1
+  /libs/user/{username}/{libraryName}/maps/zonal/status/{requestId}:
+    get:
+      summary: Get zonal calculation status
+      operationId: getZonalCalculationStatus
+      tags:
+        - Maps
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the library owner
+        - name: libraryName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of library
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Request UUID (returned from /libs/user/{username}/{libraryName}/maps/zonal)
+      responses:
+        "200":
+          description: Metadata and results from the zonal calculation request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of this zonal calculation request.
+                  webhookUrl:
+                    type: string
+                    description: The url this calculation request is configured to send results to
+                  geojson:
+                    type: string
+                    description: The geojson this calculation request is performing on
+                  dateStarted:
+                    type: string
+                    description: The timestamp of the initiation of this calculation request
+                  success:
+                    type: boolean
+                    description: Whether the zonal calculation was started successfully
+                  requestId:
+                    type: string
+                    description: The UUID for this request
+              examples:
+                Types:
+                  summary: Types
+                  value:
+                    status: string
+                    webhookUrl: string
+                    geojson: string
+                    dateStarted: string
+                    success: true
+                    requestId: string
+                Example:
+                  summary: Example
+                  value:
+                    status: COMPLETED
+                    webhookUrl: https://your-webhook-url.com
+                    geojson: "{\"type\": \"FeatureCollection\", \"name\": \"test\", \"features\": [{\"type\": \"Feature\", \"properties\": {\"id\": 274851}, \"geometry\": {\"type\": \"MultiPolygon\", \"coordinates\": [[[[-138.96826185286048, 60.02095215374802], [-137.54003919661045, 58.92733441827537], [-135.45263685286048, 59.77852198502987], [-130.04736341536045, 56.03522578369872], [-130.61865247786048, 54.67383096593112], [-128.48730482161048, 50.75035931136962], [-123.82910169661046, 48.195387408333374], [-123.27978529036045, 49.009050809382074], [-114.0303955413401, 49.012653863955016], [-120.07177747786046, 54.020679551599954], [-119.96191419661046, 59.987997631212224], [-138.96826185286048, 60.02095215374802]]]]}}, {\"type\": \"Feature\", \"properties\": {\"id\": 274852}, \"geometry\": {\"type\": \"MultiPolygon\", \"coordinates\": [[[[-120.0410158932209, 59.998986120604464], [-120.0410158932209, 54.007768761934756], [-113.88867214322092, 49.03786794532644], [-109.97753933072089, 48.98021698537498], [-110.0214846432209, 59.977005492196], [-120.0410158932209, 59.998986120604464]]]]}}, {\"type\": \"Feature\", \"properties\": {\"id\": 274853}, \"geometry\": {\"type\": \"MultiPolygon\", \"coordinates\": [[[[-109.9160161614418, 60.108670463036], [-102.09375053644183, 60.02095215374802], [-101.56640678644182, 49.210420445650314], [-110.26757866144177, 49.03786794532644], [-109.9160161614418, 60.108670463036]]]]}}]}"
+                    dateStarted: 2025-04-07T14:16:12.997Z
+                    success: true
+                    requestId: "cc9987ea-7652-45dd-9cfa-43bd50f48765"
+webhooks:
+  "Post Zonal Calculation Result": 
+    post:
+      summary: Post Zonal Calculation Result
+      operationId: postZonalCalculation
+      security: []
+      tags:
+        - Maps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  description: Whether the calculation completed successfully
+                  example: boolean
+                requestId:
+                    type: string
+                    description: The UUID for this request
+                result:
+                  type: array
+                  description: The results of the calculation
+                  items: 
+                    type: object
+                    properties:
+                      feature.properties.id:
+                        type: number
+                        description: ID of feature used in the zonal calculation
+                        example: number
+                      stats:
+                        type: object
+                        description: Array of stats from zonal calculation (zonal). Basic statistics (mean, min, max, and standard deviation) are calculated for all pixels in the specified map area
+                        items: 
+                          type: object
+                          properties: 
+                            mean:
+                              type: number
+                              description: Mean value from all pixels in the specified map area
+                              example: number
+                            min:
+                              type: number
+                              description: Minimun value from all pixels in the specified map area
+                              example: number
+                            max:
+                              type: number
+                              description: Maximum value from all pixels in the specified map area
+                              example: number
+                            stdev:
+                              type: number
+                              description: Standard deviation from all pixels in the specified map area
+                              example: number
+                      histogram:
+                        type: object
+                        description: Array of histogram results from zonal calculation (zonal-histogram). These results summarize the frequency of pixels each histogram bin, converted to square meters. Bins are categories if the supplied geojson contains a categorical variable, or are defined by user-supplied break points (histogramBins) if the supplied geojson contains a continuous variable
+            examples:
+                Types:
+                  summary: Types
+                  value:
+                    success: true
+                    requestId: string
+                    result: array
+                Example (zonal endpoint):
+                  summary: Example (zonal)
+                  value:
+                    success: true
+                    requestId: "cc9987ea-7652-45dd-9cfa-43bd50f48765"
+                    result: [
+                      {
+                        "feature.properties.id": 1,
+                        "stats": {
+                          "mean": 41.883559595029915,
+                          "min": 4.000000000000001,
+                          "max": 100.04999999999997,
+                          "stdev": 15.374198394115865
+                        }
+                      }
+                    ]
+                Example (zonal-histogram endpoint):
+                  summary: Example (zonal-histogram)
+                  value:
+                    success: true
+                    requestId: "cc9987ea-7652-45dd-9cfa-43bd50f48765"
+                    result: [
+                      {
+                        "feature.properties.id": 1,
+                        "histogram": {
+                          "0.0–10.0": 613231,
+                          "10.0–20.0": 23847876,
+                          "20.0–30.0": 53146695,
+                          "30.0–40.0": 72156859,
+                          "40.0–50.0": 86056764,
+                          "50.0–60.0": 52397191,
+                          "60.0–70.0": 28004220,
+                          "70.0–inf": 15398914,
+                        }
+                      }
+                    ]
+components:
+  securitySchemes:
+    x-ss-api-key:
+      type: apiKey
+      in: header
+      name: x-ss-api-key
+      description: Use your API key to access the endpoints.

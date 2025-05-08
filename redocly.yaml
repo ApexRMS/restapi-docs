@@ -1,0 +1,27 @@
+# reunite:
+  # ignoreLint: true
+  # ignoreLinkChecker: true
+extends:
+  - minimal
+links:
+  - href: https://fonts.googleapis.com/css2?family=VT323&display=swap
+  - href: https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap
+seo:
+  title: SyncroSim API
+  description: SyncroSim API let's you interact with SyncroSim for ecological forecasting
+navbar:
+  items:
+    - page: guides/quickstart.md
+      label: Get started
+    - page: apis/index.yaml
+      label: Reference
+    - href: https://syncrosim.com/support
+      label: Support
+markdown:
+  toc:
+    depth: 2
+logo:
+  image: images/logo.png
+  link: https://syncrosim.com
+footer:
+  copyrightText: Copyright 2025 © ApexRMS
