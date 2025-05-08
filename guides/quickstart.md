@@ -1,31 +1,24 @@
 # Get started with the SyncroSim API
 
-This tutorial guide will help you get started with the SyncroSim API and cover the basics of making API calls to [SyncroSim Cloud](https://cloud.syncrosim.com). This tutorial will cover:
+This tutorial will help you get started with the SyncroSim API and cover the basics of making API calls to [SyncroSim Cloud](https://cloud.syncrosim.com). This tutorial will show how to:
+- Get setup with the SyncroSim API
+- Get a list of libraries accessible to you
+- Get the metadata associated with a library
+- Get a list of scenarios in a library
+- Get a list of maps in a library
+- Perform a zonal calculation on a map
 
-- List libraries
-- Select library
-- Metadata
-- Scenarios exist
-- Get map List
-- Zonal calculation
-
-For more information on SyncroSim API requests, see the [Reference](/apis) page.
-
-## Step 1: Sign Up and Get Your API Key
+## Step 1: Sign up & Get setup
 
 1. Visit the [Warp Sign-Up Page](#).
 2. Create your account and log in.
 3. Navigate to your dashboard to retrieve your API key.
 
-Your API key is required to authenticate all API requests.
+An API key is required to authenticate all API requests.
 
-## Step 2: Make your first API request
+## Step 2: Get libraries
 
-Let's start by making a simple request to the SyncroSim API to ..
-
-### Get list of libraries
-
-Use the following command to get a list of the libraries available for access under your SyncroSim account.
+Begin by requesting a list of the all the libraries available for access under your SyncroSim account, using the command:
 
 ```bash
 curl -i -X GET \
@@ -33,150 +26,119 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-- **`timestamp`**: The date and time you wish to anchor, in ISO 8601 format.
-- **`description`**: A brief description of the anchor’s purpose.
-
-### Response Example
+The response should return a list of all libraries uploaded by you or that have been share with you by others.
 
 ```json
-{
-  "anchor_id": "1234567890abcdef",
-  "status": "Anchor set successfully"
-}
+[
+    {
+        "libraryName": "Library name",
+        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+        "uploadUser": "Owner username"
+    }
 ```
 
-This response confirms that the anchor has been successfully set and provides an `anchor_id` for future reference.
-The response includes a list of libraries you uploaded and others have shared with you, along with public libraries created by the community:
+## Step 3: Get library metadata
 
-## Step 3: Traveling to a Different Time
-
-Next, let's travel to a different point in time using the Warp API. Testing.
-
-### Making a Time Travel Request
-
-To travel to a specific date and time, use this `curl` command:
+Get the metadata associated with a specific library using the command:
 
 ```bash
-curl -X POST https://api.warp.com/v1/travel \
--H "Content-Type: application/json" \
--H "Authorization: Bearer YOUR_API_KEY" \
--d '{
-  "destination_time": "1889-03-10T23:45:00Z",
-  "location": "Tesla's Lab"
-}'
+curl -i -X GET \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/metadata' \
+  -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-- **`destination_time`**: The date and time you wish to travel to.
-- **`location`**: The specific location you want to arrive at.
-
-### Response Example
+The response should the following metadata fields: 
 
 ```json
 {
-  "status": "Travel successful",
-  "current_time": "1889-03-10T23:45:00Z",
-  "location": "Tesla's Lab"
+    "libraryName": "Library name",
+    "libraryOwner": "Organization name",
+    "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+    "fileSize": "X MB",
+    "packageName": "Package name",
+    "packageVersion": "X.X.X",
+    "description": "Library description"
 }
 ```
 
-This response confirms that you have successfully traveled to the specified time and location.
+## Step 4: Get scenarios in a library
 
-## Step 4: Retrieving Historical Data
-
-While in the past, you may want to retrieve specific data or objects. Here's how to do that:
-
-### Retrieving an Item
-
-Use the following `curl` command to retrieve an item:
+Get a list of the all the existing scenarios in a specific library using the command:
 
 ```bash
-curl -X GET https://api.warp.com/v1/retrieve-item \
--H "Content-Type: application/json" \
--H "Authorization: Bearer YOUR_API_KEY" \
--d '{
-  "item_description": "Tesla's Blueprint",
-  "location": "Tesla's Lab",
-  "time": "1889-03-10T23:50:00Z"
-}'
+curl -i -X GET \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/scenarios' \
+  -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response Example
+The response should return a list of all scenarios in the library with their respective metadata.
 
 ```json
-{
-  "item_id": "0987654321fedcba",
-  "status": "Item retrieved successfully",
-  "item_details": {
-    "description": "Tesla's Blueprint",
-    "retrieved_at": "1889-03-10T23:50:00Z"
-  }
-}
+[
+    {
+        "scenarioId": X,
+        "parentId": X,
+        "scenarioName": "Scenario name",
+        "isResult": true/false,
+        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+        "description": "Scenario description"
+    }
+]
 ```
 
-This response indicates that the item has been successfully retrieved and provides details about the item.
+## Step 5: Get maps in a library
 
-## Step 5: Returning to Your Temporal Anchor
-
-Once you've completed your mission, return to your previously set temporal anchor.
-
-### Returning to an Anchor
-
-To return to your temporal anchor, use this `curl` command:
+Get a list of the all the existing maps in a specific library using the command:
 
 ```bash
-curl -X POST https://api.warp.com/v1/return \
--H "Content-Type: application/json" \
--H "Authorization: Bearer YOUR_API_KEY" \
--d '{
-  "anchor_id": "1234567890abcdef"
-}'
+curl -i -X GET \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/maps?type=string' \
+  -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response Example
+The response should return a list of all maps in the library with their respective metadata.
 
 ```json
-{
-  "status": "Return successful",
-  "current_time": "2024-09-01T00:00:00Z"
-}
+[
+    {
+        "mapLayoutId": X,
+        "mapLayoutTitle": "Map type name",
+        "scenarioId": X,
+        "iteration": X,
+        "variableShortName": "packageName_DatasheetName",
+        "variableDisplayName": "Datasheet name",
+        "timestep": X,
+        "uniqueMapIdentifier": "string"
+    }
+]
 ```
 
-This response confirms that you've successfully returned to your starting point.
+## Step 6: Perform zonal calculations
 
-## Step 6: Monitoring for Paradoxes
-
-Finally, ensure that your actions haven’t created any temporal paradoxes:
-
-### Checking for Paradoxes
-
-Use the following `curl` command:
+Lastly, for a given map of your choosing, perform a zonal calculation for a subset of the map area using the command:
 
 ```bash
-curl -X GET https://api.warp.com/v1/check-paradox \
--H "Content-Type: application/json" \
--H "Authorization: Bearer YOUR_API_KEY" \
--d '{
-  "timeline_id": "primary"
-}'
+curl -i -X POST \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/maps/zonal' \
+  -H 'Content-Type: application/json' \
+  -H 'x-ss-api-key: YOUR_API_KEY_HERE' \
+  -d '{
+    "mapId": "string",
+    "webhookUrl": "string",
+    "geojson": "string"
+  }'
 ```
 
-### Response Example
+The results will be displayed in the `webhookUrl` provided and the response will signal the completion of the request.
 
 ```json
 {
-  "status": "No paradoxes detected",
-  "timeline_stability": "Stable"
+  "success": true/false,
+  "message": "string",
+  "requestId": "string"
 }
 ```
 
-This response indicates that your timeline is stable and free of paradoxes.
+## Next steps
 
-## Congratulations!
-
-You’ve completed your first time travel mission using the Warp API! Explore more advanced features in our [documentation](#) or join our [community](#) to connect with other time travelers.
-
-[Start Your Next Mission](#)
-
-```
-
-```
+This tutorial covered the basics of using the SyncroSim API. Explore more advanced features in the [Reference](/apis) page.
