@@ -18,6 +18,8 @@ An API key is required to authenticate all API requests.
 
 ## Step 2: Get libraries
 
+### Request
+
 Begin by requesting a list of the all the libraries available for access under your SyncroSim account, using the command:
 
 ```bash
@@ -25,6 +27,8 @@ curl -i -X GET \
   https://apidocs.syncrosim.com/_mock/apis/libs \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
+
+### Response 
 
 The response should return a list of all libraries uploaded by you or that have been share with you by others.
 
@@ -39,7 +43,9 @@ The response should return a list of all libraries uploaded by you or that have 
 
 ## Step 3: Get library metadata
 
-Get the metadata associated with a specific library using the command:
+### Request
+
+To get the metadata associated with a specific library, use the command:
 
 ```bash
 curl -i -X GET \
@@ -47,7 +53,9 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-The response should the following metadata fields: 
+### Response 
+
+The response should return the following metadata fields: 
 
 ```json
 {
@@ -63,13 +71,17 @@ The response should the following metadata fields:
 
 ## Step 4: Get scenarios in a library
 
-Get a list of the all the existing scenarios in a specific library using the command:
+### Request
+
+To get a list of the all the existing scenarios in a specific library, use the command:
 
 ```bash
 curl -i -X GET \
   'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/scenarios' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
+
+### Response 
 
 The response should return a list of all scenarios in the library with their respective metadata.
 
@@ -88,13 +100,17 @@ The response should return a list of all scenarios in the library with their res
 
 ## Step 5: Get maps in a library
 
-Get a list of the all the existing maps in a specific library using the command:
+### Request
+
+To get a list of the all the existing maps in a specific library, use the command:
 
 ```bash
 curl -i -X GET \
   'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/maps?type=string' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
+
+### Response 
 
 The response should return a list of all maps in the library with their respective metadata.
 
@@ -115,7 +131,9 @@ The response should return a list of all maps in the library with their respecti
 
 ## Step 6: Perform zonal calculations
 
-Lastly, for a given map of your choosing, perform a zonal calculation for a subset of the map area using the command:
+### Request
+
+Lastly, to perform a zonal calculation on a subset of a map, use the command:
 
 ```bash
 curl -i -X POST \
@@ -129,7 +147,9 @@ curl -i -X POST \
   }'
 ```
 
-The results will be displayed in the `webhookUrl` provided and the response will signal the completion of the request.
+### Response 
+
+The results will be displayed in the `webhookUrl` provided, and the response will signal the completion of the request.
 
 ```json
 {
