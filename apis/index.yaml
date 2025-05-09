@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: SyncroSim API
-  description: API for managing organizations, libraries, maps, and performing zonal calculations.
+  description: The API for managing SyncroSim organizations, libraries, maps, and performing zonal calculations.
   version: 1.0.0
   contact:
     name: SyncroSim API Support

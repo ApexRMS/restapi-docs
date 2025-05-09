@@ -1,12 +1,12 @@
-# Get started with the SyncroSim API
+# Get started
 
-This tutorial will help you get started with the SyncroSim API and cover the basics of making API calls to [SyncroSim Cloud](https://cloud.syncrosim.com). This tutorial will show how to:
-- Get setup with the SyncroSim API
-- Get a list of libraries accessible to you
-- Get the metadata associated with a library
-- Get a list of scenarios in a library
-- Get a list of maps in a library
-- Perform a zonal calculation on a map
+This tutorial will get you started with the **SyncroSim API**, covering the basics of making API calls to [SyncroSim Cloud](https://cloud.syncrosim.com). It includes how to:
+* Get setup with the SyncroSim API
+* Get a list of libraries accessible to you
+* Get the metadata associated with a library
+* Get a list of scenarios in a library
+* Get a list of maps in a library
+* Perform a zonal calculations on a map
 
 ## Step 1: Sign up & Get setup
 
@@ -20,7 +20,7 @@ An API key is required to authenticate all API requests.
 
 ### Request
 
-Begin by requesting a list of the all the libraries available for access under your SyncroSim account, using the command:
+Begin by requesting a list of all the libraries available for access under your SyncroSim account, using the command:
 
 ```bash
 curl -i -X GET \
@@ -30,7 +30,7 @@ curl -i -X GET \
 
 ### Response 
 
-The response should return a list of all libraries uploaded by you or that have been share with you by others.
+The response should return a list of all libraries uploaded by you. If you belong to an organization, you will also be able to see all the libraries published by other members of that organization.
 
 ```json
 [
@@ -39,28 +39,29 @@ The response should return a list of all libraries uploaded by you or that have 
         "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
         "uploadUser": "Owner username"
     }
+]
 ```
 
 ## Step 3: Get library metadata
 
 ### Request
 
-To get the metadata associated with a specific library, use the command:
+To get the metadata associated with a library, identify the `uploadUser` and `libraryName` of the target library, and substitute them in the following command:
 
 ```bash
 curl -i -X GET \
-  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/metadata' \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{uploadUser}/{libraryName}/metadata' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
 ### Response 
 
-The response should return the following metadata fields: 
+The response should return the following metadata fields for the specified library: 
 
 ```json
 {
     "libraryName": "Library name",
-    "libraryOwner": "Organization name",
+    "libraryOwner": "User or Organization name",
     "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
     "fileSize": "X MB",
     "packageName": "Package name",
@@ -73,23 +74,23 @@ The response should return the following metadata fields:
 
 ### Request
 
-To get a list of the all the existing scenarios in a specific library, use the command:
+To get a list of all the existing scenarios in a specific library, use the command:
 
 ```bash
 curl -i -X GET \
-  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/scenarios' \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{uploadUser}/{libraryName}/scenarios' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
 ### Response 
 
-The response should return a list of all scenarios in the library with their respective metadata.
+The response should return a list of all scenarios in the specified library with their respective metadata.
 
 ```json
 [
     {
         "scenarioId": X,
-        "parentId": X,
+        "parentId": X/null,
         "scenarioName": "Scenario name",
         "isResult": true/false,
         "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
@@ -102,17 +103,17 @@ The response should return a list of all scenarios in the library with their res
 
 ### Request
 
-To get a list of the all the existing maps in a specific library, use the command:
+To get a list of all the existing maps in a specific library, use the command:
 
 ```bash
 curl -i -X GET \
-  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/maps?type=string' \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{uploadUser}/{libraryName}/maps?type=string' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
 ### Response 
 
-The response should return a list of all maps in the library with their respective metadata.
+The response should return a list of all maps in the specified library with their respective metadata.
 
 ```json
 [
@@ -120,10 +121,10 @@ The response should return a list of all maps in the library with their respecti
         "mapLayoutId": X,
         "mapLayoutTitle": "Map type name",
         "scenarioId": X,
-        "iteration": X,
+        "iteration": X/null,
         "variableShortName": "packageName_DatasheetName",
         "variableDisplayName": "Datasheet name",
-        "timestep": X,
+        "timestep": X/null,
         "uniqueMapIdentifier": "string"
     }
 ]
@@ -133,11 +134,11 @@ The response should return a list of all maps in the library with their respecti
 
 ### Request
 
-Lastly, to perform a zonal calculation on a subset of a map, use the command:
+Lastly, to perform a zonal calculation on a subset area of a map, in addition to the `{uploadUser}` and `{libraryName}` of the target library, you will need to: (1) copy the `mapId` for the target map from the previous response, (2) provide a `webhookUrl` for the results to be delivered to, and (3) provide a `geojson` of the map area to be used in the zonal calculation. Substitute them in the following command:
 
 ```bash
 curl -i -X POST \
-  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{username}/{libraryName}/maps/zonal' \
+  'https://apidocs.syncrosim.com/_mock/apis/libs/user/{uploadUser}/{libraryName}/maps/zonal' \
   -H 'Content-Type: application/json' \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE' \
   -d '{
