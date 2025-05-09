@@ -12,7 +12,7 @@ seo:
 navbar:
   items:
     - page: guides/quickstart.md
-      label: Get started
+      label: Tutorials
     - page: apis/index.yaml
       label: Reference
     - href: https://syncrosim.com/support
@@ -21,7 +21,7 @@ markdown:
   toc:
     depth: 2
 logo:
-  image: images/logo.png
-  link: https://syncrosim.com
+  image: images/logo-new.png
+  link: https://syncrosim.com/api
 footer:
   copyrightText: Copyright 2025 © ApexRMS
