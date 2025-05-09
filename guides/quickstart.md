@@ -63,9 +63,9 @@ The response should return the following metadata fields for the specified libra
     "libraryName": "Library name",
     "libraryOwner": "User or Organization name",
     "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
-    "fileSize": "X MB",
+    "fileSize": "1 MB",
     "packageName": "Package name",
-    "packageVersion": "X.X.X",
+    "packageVersion": "1.0.0",
     "description": "Library description"
 }
 ```
@@ -89,10 +89,18 @@ The response should return a list of all scenarios in the specified library with
 ```json
 [
     {
-        "scenarioId": X,
-        "parentId": X/null,
+        "scenarioId": 1,
+        "parentId": null,
         "scenarioName": "Scenario name",
-        "isResult": true/false,
+        "isResult": false,
+        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+        "description": "Scenario description"
+    },
+    {
+        "scenarioId": 2,
+        "parentId": 1,
+        "scenarioName": "Scenario name",
+        "isResult": true,
         "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
         "description": "Scenario description"
     }
@@ -118,13 +126,13 @@ The response should return a list of all maps in the specified library with thei
 ```json
 [
     {
-        "mapLayoutId": X,
+        "mapLayoutId": 1,
         "mapLayoutTitle": "Map type name",
-        "scenarioId": X,
-        "iteration": X/null,
+        "scenarioId": 2,
+        "iteration": 1,
         "variableShortName": "packageName_DatasheetName",
         "variableDisplayName": "Datasheet name",
-        "timestep": X/null,
+        "timestep": 1,
         "uniqueMapIdentifier": "string"
     }
 ]
@@ -154,7 +162,7 @@ The results will be displayed in the `webhookUrl` provided, and the response wil
 
 ```json
 {
-  "success": true/false,
+  "success": true,
   "message": "string",
   "requestId": "string"
 }
