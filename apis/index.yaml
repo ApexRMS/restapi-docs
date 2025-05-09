@@ -1,10 +1,19 @@
 openapi: 3.1.0
 info:
-  title: SyncroSim API
-  description: The API for managing SyncroSim organizations, libraries, maps, and performing zonal calculations.
-  version: 1.0.0
+  title: Introduction
+  description: |
+    The **SyncroSim API** is a RESTful API for interacting with [SyncroSim Cloud](https://cloud.syncrosim.com) 
+    to:
+    * Manage organizations
+    * Access libraries 
+    * Access maps
+    * Perform zonal calculations
+    
+    The API is usable via HTTP in any environment that supports HTTP requests.
+
+    For a step-by-step guide on the basics of using the API, see the [Get started](/guides/quickstart.md) page.  
   contact:
-    name: SyncroSim API Support
+    name: SyncroSim API support
     email: support@syncrosim.com
   license:
     name: MIT
@@ -141,14 +150,14 @@ paths:
                     libraryName: helloworldCourse
                     lastModified: 2023-09-11 at 2:56 PM
 
-  /libs/user/{username}/{libraryName}/metadata:
+  /libs/user/{uploadUser}/{libraryName}/metadata:
     get:
       summary: Get library metadata
       operationId: getLibraryMetadata
       tags:
         - Libraries
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -211,14 +220,14 @@ paths:
                     packageVersion: 1.0.2
                     description: "This Library was designed to showcase the publishing process to the SyncroSim Cloud."
 
-  /libs/user/{username}/{libraryName}/scenarios:
+  /libs/user/{uploadUser}/{libraryName}/scenarios:
     get:
       summary: Get scenarios in a library
       operationId: getLibraryScenarios
       tags:
         - Libraries
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -276,14 +285,14 @@ paths:
                     lastModified: 2024-03-20 at 4:39 PM
                     description: Simple non-spatial model of a forest landscape with 20 hectares of timber harvest per year.
 
-  /libs/user/{username}/{libraryName}/maps:
+  /libs/user/{uploadUser}/{libraryName}/maps:
     get:
       summary: Get maps in a library
       operationId: getLibraryMaps
       tags:
         - Maps
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -398,14 +407,14 @@ paths:
                                         variableDisplayName: State Classes
                                         uniqueMapIdentifier: NC0tLTIyLS0tMi0tLXN0c2ltX1N0YXRlQ2xhc3MtLS0yMg==
 
-  /libs/user/{username}/{libraryName}/maps/{mapId}:
+  /libs/user/{uploadUser}/{libraryName}/maps/{mapId}:
     get:
       summary: Get GeoTIFF file for a map
       operationId: getRasterFile
       tags:
         - Maps
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -422,7 +431,7 @@ paths:
           required: true
           schema:
             type: string
-          description: File name of the map to download (select from uniqueMapIdentifier variable in /libs/user/{username}/{libraryName}/maps/filterOptionTree response)
+          description: File name of the map to download (select from uniqueMapIdentifier variable in /libs/user/{uploadUser}/{libraryName}/maps/filterOptionTree response)
       responses:
         "200":
           description: Path to GeoTIFF file
@@ -435,7 +444,7 @@ paths:
                     type: string
                     description: Path to download specified map file. This url will be valid for 1 hour. 
   
-  /libs/user/{username}/{libraryName}/maps/zonal:
+  /libs/user/{uploadUser}/{libraryName}/maps/zonal:
     post:
       summary: Perform zonal calculations with single summarized result
       operationId: performZonalCalculation
@@ -450,7 +459,7 @@ paths:
               properties:
                 mapId:
                   type: string
-                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{username}/{libraryName}/maps response)
+                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{uploadUser}/{libraryName}/maps response)
                 webhookUrl:
                   type: string
                   description: Webhook for sending the zonal calculation results
@@ -458,7 +467,7 @@ paths:
                   type: string
                   description: Geojson of area to be used in the zonal calculation
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -500,7 +509,7 @@ paths:
                     success: True
                     message: Zonal calculation started.
                     requestId: 2871d70d-bcae-449b-9a07-a5ac29739fb1
-  /libs/user/{username}/{libraryName}/maps/zonal-histogram:
+  /libs/user/{uploadUser}/{libraryName}/maps/zonal-histogram:
     post:
       summary: Perform zonal calculations with results summarized as a histogram
       operationId: performZonalCalculationHistogram
@@ -515,7 +524,7 @@ paths:
               properties:
                 mapId:
                   type: string
-                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{username}/{libraryName}/maps response)
+                  description: File name of the map to perform zonal calculation with (select from uniqueMapIdentifier returned by /libs/user/{uploadUser}/{libraryName}/maps response)
                 webhookUrl:
                   type: string
                   description: Webhook for sending the zonal calculation results
@@ -526,7 +535,7 @@ paths:
                   type: string
                   description: List of values for break points in the histogram bins (optional; for continuous variables only)
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -568,14 +577,14 @@ paths:
                     success: True
                     message: Zonal calculation started.
                     requestId: 2871d70d-bcae-449b-9a07-a5ac29739fb1
-  /libs/user/{username}/{libraryName}/maps/zonal/status/{requestId}:
+  /libs/user/{uploadUser}/{libraryName}/maps/zonal/status/{requestId}:
     get:
       summary: Get zonal calculation status
       operationId: getZonalCalculationStatus
       tags:
         - Maps
       parameters:
-        - name: username
+        - name: uploadUser
           in: path
           required: true
           schema:
@@ -592,7 +601,7 @@ paths:
           required: true
           schema:
             type: string
-          description: Request UUID (returned from /libs/user/{username}/{libraryName}/maps/zonal)
+          description: Request UUID (returned from /libs/user/{uploadUser}/{libraryName}/maps/zonal)
       responses:
         "200":
           description: Metadata and results from the zonal calculation request
