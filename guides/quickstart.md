@@ -1,12 +1,13 @@
 # Get started
 
 This tutorial will get you started with the **SyncroSim API**, covering the basics of making API calls to [SyncroSim Cloud](https://cloud.syncrosim.com). It includes how to:
-* Get setup with the SyncroSim API
-* Get a list of libraries accessible to you
-* Get the metadata associated with a library
-* Get a list of scenarios in a library
-* Get a list of maps in a library
-* Perform a zonal calculations on a map
+
+- Get setup with the SyncroSim API
+- Get a list of libraries accessible to you
+- Get the metadata associated with a library
+- Get a list of scenarios in a library
+- Get a list of maps in a library
+- Perform a zonal calculations on a map
 
 ## Step 1: Sign up & Get setup
 
@@ -28,17 +29,17 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response 
+### Response
 
 The response should return a list of all libraries uploaded by you. If you belong to an organization, you will also be able to see all the libraries published by other members of that organization.
 
 ```json
 [
-    {
-        "libraryName": "Library name",
-        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
-        "uploadUser": "Owner username"
-    }
+  {
+    "libraryName": "Library name",
+    "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+    "uploadUser": "Owner username"
+  }
 ]
 ```
 
@@ -54,19 +55,19 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response 
+### Response
 
-The response should return the following metadata fields for the specified library: 
+The response should return the following metadata fields for the specified library:
 
 ```json
 {
-    "libraryName": "Library name",
-    "libraryOwner": "User or Organization name",
-    "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
-    "fileSize": "1 MB",
-    "packageName": "Package name",
-    "packageVersion": "1.0.0",
-    "description": "Library description"
+  "libraryName": "Library name",
+  "libraryOwner": "User or Organization name",
+  "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+  "fileSize": "1 MB",
+  "packageName": "Package name",
+  "packageVersion": "1.0.0",
+  "description": "Library description"
 }
 ```
 
@@ -82,28 +83,28 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response 
+### Response
 
 The response should return a list of all scenarios in the specified library with their respective metadata.
 
 ```json
 [
-    {
-        "scenarioId": 1,
-        "parentId": null,
-        "scenarioName": "Scenario name",
-        "isResult": false,
-        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
-        "description": "Scenario description"
-    },
-    {
-        "scenarioId": 2,
-        "parentId": 1,
-        "scenarioName": "Scenario name",
-        "isResult": true,
-        "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
-        "description": "Scenario description"
-    }
+  {
+    "scenarioId": 1,
+    "parentId": null,
+    "scenarioName": "Scenario name",
+    "isResult": false,
+    "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+    "description": "Scenario description"
+  },
+  {
+    "scenarioId": 2,
+    "parentId": 1,
+    "scenarioName": "Scenario name",
+    "isResult": true,
+    "lastModified": "Year-Month-Day at Hour:Minute AM/PM",
+    "description": "Scenario description"
+  }
 ]
 ```
 
@@ -119,22 +120,22 @@ curl -i -X GET \
   -H 'x-ss-api-key: YOUR_API_KEY_HERE'
 ```
 
-### Response 
+### Response
 
 The response should return a list of all maps in the specified library with their respective metadata.
 
 ```json
 [
-    {
-        "mapLayoutId": 1,
-        "mapLayoutTitle": "Map type name",
-        "scenarioId": 2,
-        "iteration": 1,
-        "variableShortName": "packageName_DatasheetName",
-        "variableDisplayName": "Datasheet name",
-        "timestep": 1,
-        "uniqueMapIdentifier": "string"
-    }
+  {
+    "mapLayoutId": 1,
+    "mapLayoutTitle": "Map type name",
+    "scenarioId": 2,
+    "iteration": 1,
+    "variableShortName": "packageName_DatasheetName",
+    "variableDisplayName": "Datasheet name",
+    "timestep": 1,
+    "uniqueMapIdentifier": "string"
+  }
 ]
 ```
 
@@ -156,7 +157,7 @@ curl -i -X POST \
   }'
 ```
 
-### Response 
+### Response
 
 The results will be displayed in the `webhookUrl` provided, and the response will signal the completion of the request.
 
