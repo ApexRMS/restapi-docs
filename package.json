@@ -1,13 +1,13 @@
 {
-    "name": "warp",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-      "start": "npx @redocly/cli preview"
-    },
-    "dependencies": {
-     "@redocly/redoc-revel": "*"
-    }
+  "name": "warp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx @redocly/cli preview",
+    "build": "mkdir -p dist && npx @redocly/cli build-docs apis/index.yaml -o dist/index.html"
+  },
+  "dependencies": {
+    "@redocly/redoc-revel": "*"
   }
-
+}
