@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "npx @redocly/cli preview",
+    "start": "npx @redocly/cli preview --port 4000",
     "build": "mkdir -p dist && npx @redocly/cli build-docs apis/index.yaml -o dist/index.html"
   },
   "dependencies": {
